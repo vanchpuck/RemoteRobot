@@ -6,7 +6,7 @@ public class BrakeExecutor implements Executable {
 
 	@Override
 	public void execute(RemoteRobot robot) {
-		System.out.println("Brake");
+		robot.getEngine().stop();
 	}
 	
 }

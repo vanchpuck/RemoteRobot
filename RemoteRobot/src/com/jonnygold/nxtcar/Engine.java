@@ -4,6 +4,13 @@ import lejos.nxt.Motor;
 
 public class Engine {
 
+	public static enum Direction{
+		FORWARD {public void move(){Motor.A.backward();}},
+		BACKWARD {public void move(){Motor.A.forward();}};
+		
+		public abstract void move();
+	}
+	
 	private static class Accelerator extends Thread{
 		
 		private final static int MAX_SPEED = 800;
@@ -51,16 +58,27 @@ public class Engine {
 	}
 	
 	
-	private Thread action;
+//	private Thread action;
+	
+	private Direction direction;
 	
 	public Engine(){
-//		Motor.A.setSpeed(0);
+		direction = Direction.FORWARD;
+	}
+	
+	public Direction getDirection(){
+		return direction;
+	}
+	
+	public void setDirection(Direction direction){
+		this.direction = direction;
 	}
 	
 	public void accelerate(){
 		System.out.println("accelerate: "+Motor.A.getMaxSpeed());
 		Motor.A.setAcceleration(200);
-		Motor.A.backward();
+		Motor.A.setSpeed(800);
+		getDirection().move();
 //		Motor.A.setSpeed(600);
 //		if(action != null)
 //			action.interrupt();
@@ -70,7 +88,7 @@ public class Engine {
 	}
 	
 	public void decelerate(){
-		Motor.A.setAcceleration(200);
+		Motor.A.setAcceleration(100);
 		Motor.A.flt(true);
 		System.out.println("decelerate: ");
 		
@@ -80,6 +98,12 @@ public class Engine {
 //		
 //		action = new Decelerator();
 //		action.start();
+	}
+	
+	public void stop(){
+		Motor.A.setAcceleration(800);
+		Motor.A.flt(true);
+		System.out.println("stop: ");
 	}
 	
 }
